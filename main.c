@@ -20,7 +20,7 @@ typedef struct {
     CAS cas;
 } DATA;
 
-DATA cteniSouboru(int *pocet, DATA *data) {
+DATA *cteniSouboru(int *pocet, DATA *data) {
     FILE *f = NULL;
     char *temp;
     char lajna[100];
@@ -35,58 +35,54 @@ DATA cteniSouboru(int *pocet, DATA *data) {
 
     fgets(lajna, 100, f);
     while (fgets(lajna, 100, f)) {
-        temp = (char *) realloc(temp, (*pocet) + 1 * sizeof(char));
-        if (temp = NULL) {
-            printf("Chyba při alokaci paměti");
-            return;
-        }
-            temp = strtok (lajna," ,.-");
-            while (temp != NULL)
-            {
-                switch (i) {
-                    case 0:
-                        data[*pocet].start = atoi(temp);
+        data = (DATA *) realloc(data, (*pocet + 1) * sizeof(DATA));
+        i = 0;
+        temp = strtok(lajna, DEL);
+        while (temp != NULL) {
+            switch (i) {
+                case 0:
+                    data[*pocet].start = atoi(temp);
                     break;
-                    case 1:
-                        strcpy(data[*pocet].prijmeni, temp);
+                case 1:
+                    strcpy(data[*pocet].prijmeni, temp);
                     break;
-                    case 2:
-                        strcpy(data[*pocet].jmeno, temp);
+                case 2:
+                    strcpy(data[*pocet].jmeno, temp);
                     break;
-                    case 3:
-                        data[*pocet].rocnik = atoi(temp);
+                case 3:
+                    data[*pocet].rocnik = atoi(temp);
                     break;
-                    case 4:
-                        strcpy(data[*pocet].narod, temp);
+                case 4:
+                    strcpy(data[*pocet].narod, temp);
                     break;
-                    case 5:
-                        data[*pocet].cas.hod = atoi(temp);
+                case 5:
+                    data[*pocet].cas.hod = atoi(temp);
                     break;
-                    case 6:
-                        data[*pocet].cas.min = atoi(temp);
+                case 6:
+                    data[*pocet].cas.min = atoi(temp);
                     break;
-                    case 7:
-                        data[*pocet].cas.sec = atoi(temp);
+                case 7:
+                    data[*pocet].cas.sec = atoi(temp);
                     break;
-                }
-                temp = strtok (NULL, " ,.-");
-                i++;
             }
+            temp = strtok(NULL, DEL);
+            i++;
+        }
 
 
         (*pocet)++;
-        //printf("%s", lajna);
     }
-    free(temp);
+
     fclose(f);
 
-    return *data;
+    return data;
 }
 
 int main(void) {
     int pocet = 0;
-    DATA *dejta;
-    cteniSouboru(&pocet, &dejta);
-    printf("%d",dejta[1].rocnik);
+    DATA *dejta = NULL;
+    dejta = cteniSouboru(&pocet, dejta);
+
+    printf("%d", dejta[10].rocnik);
     return 0;
 }
